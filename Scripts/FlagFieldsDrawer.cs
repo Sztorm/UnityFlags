@@ -30,11 +30,20 @@ namespace Sztorm.Unity.Flags
         private float toggleHeight;
         private FlagFieldsAttribute flagFields;
 
+        private void Cache()
+        {
+            toggleHeight = GUI.skin.toggle.padding.vertical + GUI.skin.toggle.border.vertical;
+            flagFields = attribute as FlagFieldsAttribute;
+            Type underlyingEnumType = Enum.GetUnderlyingType(fieldInfo.FieldType);
+            underlyingEnumTypeIsSByte = underlyingEnumType.Name == "SByte";
+            isCached = true;
+        }
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             if (!isCached)
             {
-                flagFields = attribute as FlagFieldsAttribute;
+                Cache();
             }
             return ToggleControlHeight * flagFields.Count - InspectorBottomPadding;
         }
@@ -43,18 +52,14 @@ namespace Sztorm.Unity.Flags
         {
             if (!isCached)
             {
-                toggleHeight = GUI.skin.toggle.padding.vertical + GUI.skin.toggle.border.vertical;
-                flagFields = attribute as FlagFieldsAttribute;
-                Type underlyingEnumType = Enum.GetUnderlyingType(fieldInfo.FieldType);
-                underlyingEnumTypeIsSByte = underlyingEnumType.Name == "SByte";
-                isCached = true;
+                Cache();
             }
             BitFlags8 flags = (BitFlags8)(property.intValue);
             Vector2 toggleRectSize = new Vector2(position.size.x, toggleHeight);
 
             EditorGUI.BeginProperty(position, label, property);
 
-            for (int i = 0, propIndex = 0, length = flagFields.Names.Length; i < length; i++)
+            for (int i = 0, propIndex = 0, length = flagFields.Names.Count; i < length; i++)
             {
                 if (flagFields.Names[i] != null)
                 {

@@ -36,7 +36,13 @@ public class TestBehaviour : MonoBehaviour
     };
 
     [Header("SByteFlags")]
-    [SerializeField]
+    [FlagTooltips(
+        tooltip0: "This is A1.",
+        tooltip1: "This is B1.",
+        tooltip2: "This is C1.",
+        tooltip4: "This is D1.",
+        tooltip6: "This is G1.",
+        tooltip7: "This is H1.")]
     [FlagFields(
         flagName0: "A1",
         flagName1: "B1",
@@ -44,10 +50,10 @@ public class TestBehaviour : MonoBehaviour
         flagName3: "D1",
         flagName6: "G1",
         flagName7: "H1")]
+    [SerializeField]
     private SByteFlags sbyteFlags;
 
     [Header("ByteFlags")]
-    [SerializeField]
     [FlagFields(
         flagName0: "A2",
         flagName1: "B2",
@@ -55,14 +61,15 @@ public class TestBehaviour : MonoBehaviour
         flagName5: "F2",
         flagName6: "G2",
         flagName7: "H2")]
+    [SerializeField]
     private ByteFlags byteFlags;
 
-    [SerializeField]
     [FlagFields(
-    flagName0: "A3",
-    flagName2: "C3",
-    flagName4: "E3",
-    flagName6: "G3")]
+        flagName0: "A3",
+        flagName2: "C3",
+        flagName4: "E3",
+        flagName6: "G3")]
+    [SerializeField]
     private ByteFlags flags;
 
     private void Update()

@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.ObjectModel;
+using UnityEngine;
 
 namespace Sztorm.Unity.Flags
 {
     public class FlagFieldsAttribute : PropertyAttribute
     {
-        public readonly string[] Names;
+        public readonly ReadOnlyCollection<string> Names;
         public readonly int Count;
 
         public FlagFieldsAttribute(
@@ -17,25 +19,25 @@ namespace Sztorm.Unity.Flags
             string flagName6 = null,
             string flagName7 = null)
         {
-            Names = new string[8];
-            Names[0] = flagName0;
-            Names[1] = flagName1;
-            Names[2] = flagName2;
-            Names[3] = flagName3;
-            Names[4] = flagName4;
-            Names[5] = flagName5;
-            Names[6] = flagName6;
-            Names[7] = flagName7;
-
+            var names = new string[8];
+            names[0] = flagName0;
+            names[1] = flagName1;
+            names[2] = flagName2;
+            names[3] = flagName3;
+            names[4] = flagName4;
+            names[5] = flagName5;
+            names[6] = flagName6;
+            names[7] = flagName7;
             int count = 0;
 
-            for (int i = 0; i < Names.Length; i++)
+            for (int i = 0; i < names.Length; i++)
             {
-                if (Names[i] != null)
+                if (names[i] != null)
                 {
                     count++;
                 }
             }
+            Names = Array.AsReadOnly(names);
             Count = count;
         }
     }
