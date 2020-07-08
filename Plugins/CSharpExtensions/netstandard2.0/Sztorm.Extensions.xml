@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sztorm.Extensions</name>
+    </assembly>
+    <members>
+        <member name="T:Sztorm.Extensions.AssemblyDoc">
+            <summary>
+                Sztorm/CSharpExtensions API
+            </summary>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.WithFlags``1(``0,``0)">
+            <summary>
+                Returns <paramref name="source"/> enum with specified <paramref name="flags"/>.
+                <br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.WithoutFlags``1(``0,``0)">
+            <summary>
+                Returns <paramref name="source"/> enum without specified <paramref name="flags"/>.
+                <br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.WithFlagsSetTo``1(``0,``0,System.Boolean)">
+            <summary>
+                Returns <paramref name="source"/> enum with specified <paramref name="flags"/> set
+                to <paramref name="value"/>.<br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.WithFlagsToggled``1(``0,``0)">
+            <summary>
+                Returns <paramref name="source"/> enum with specified <paramref name="flags"/>
+                toggled.<br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.HasAllFlags``1(``0,``0)">
+            <summary>
+                Returns value indicating whether all the <paramref name="flags"/> are set in the
+                current instance. Always returns <see langword="true"/> for flags whose underlying
+                value is zero.<br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sztorm.Extensions.Enum.EnumExtensions.HasAnyFlags``1(``0,``0)">
+            <summary>
+                Returns value indicating whether any of the <paramref name="flags"/> is set in the
+                current instance. Always returns <see langword="false"/> for flags whose underlying
+                value is zero.<br/>
+                Supported enum sizes are 1, 2, 4 and 8-byte.
+                <para>
+                    Exceptions:<br/>
+                    <see cref="T:System.ArgumentException"/>: Size of underlying enum type is not supported.
+                </para>
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="source"></param>
+            <param name="flags"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
