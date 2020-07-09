@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEditor;
 using Sztorm.Extensions.Enum;
 
@@ -10,23 +11,67 @@ namespace Sztorm.Unity.Flags
         private const float ToggleControlHeight = 18;
         private const float InspectorBottomPadding = 2;
         private Cache cache;
-        
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        private Action<SerializedProperty, BitFlags32> setPropertyValue;
+
+        private void SetPropertyByteValue(SerializedProperty property, BitFlags32 flags)
+        {
+            property.intValue = (byte)flags;
+        }
+
+        private void SetPropertySByteValue(
+            SerializedProperty property, BitFlags32 flags)
+        {
+            property.intValue = (sbyte)flags;
+        }
+
+        private void SetProperSetPropertyValueMethod()
+        {
+            Type underlyingEnumType = Enum.GetUnderlyingType(fieldInfo.FieldType);
+
+            if (underlyingEnumType.Equals(typeof(sbyte)))
+            {
+                setPropertyValue = SetPropertySByteValue;
+            }
+            else if (underlyingEnumType.Equals(typeof(byte)))
+            {
+                setPropertyValue = SetPropertyByteValue;
+            }
+        }
+
+        private void InitDrawerFieldsIfNeeded()
         {
             if (cache is null)
             {
                 cache = new Cache(this);
+                SetProperSetPropertyValueMethod();
             }
+        }
+
+        private void CheckFlagsTypeCompatibility()
+        {
+            if (cache.IsIncompatibleType)
+            {
+                throw new ArgumentException("Enum underlying type must be byte or sbyte. Do not " +
+                    "use FlagFields attribute with other enum types. Fix fields that have wrong " +
+                    $"enum type in {fieldInfo.DeclaringType} script or remove the FlagFields " +
+                    $"attribute from them.");
+            }
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            InitDrawerFieldsIfNeeded();
+            CheckFlagsTypeCompatibility();
             return ToggleControlHeight * cache.FlagFields.Count - InspectorBottomPadding;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (cache is null)
-            {
-                cache = new Cache(this);
-            }
-            BitFlags8 flags = (BitFlags8)(property.intValue);
+            InitDrawerFieldsIfNeeded();
+            CheckFlagsTypeCompatibility();
+            BitFlags32 flags = (BitFlags32)((byte)property.intValue);
+            Debug.Log((int)flags);
+
             Vector2 toggleRectSize = new Vector2(position.size.x, cache.ToggleHeight);
 
             EditorGUI.BeginProperty(position, label, property);
@@ -35,7 +80,7 @@ namespace Sztorm.Unity.Flags
             {
                 if (cache.FlagFields.Names[i] != null)
                 {
-                    BitFlags8 flag = (BitFlags8)(1 << i);
+                    BitFlags32 flag = (BitFlags32)(1 << i);
 
                     bool isChecked = EditorGUI.Toggle(
                         new Rect(
@@ -43,19 +88,13 @@ namespace Sztorm.Unity.Flags
                             toggleRectSize),
                         cache.FlagsContent[i],
                         flags.HasAllFlags(flag));
-
+                    Debug.Log("i:" + i + "flag: " + (int)flag);
                     flags = flags.WithFlagsSetTo(flag, isChecked);
                     propIndex++;
                 }
             }
-            if (cache.UnderlyingEnumTypeIsSByte)
-            {
-                property.intValue = (sbyte)flags;
-            }
-            else
-            {
-                property.intValue = (byte)flags;
-            }
+            setPropertyValue(property, flags);
+
             EditorGUI.EndProperty();
         }
     }

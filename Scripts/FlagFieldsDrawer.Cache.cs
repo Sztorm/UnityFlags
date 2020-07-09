@@ -8,11 +8,11 @@ namespace Sztorm.Unity.Flags
         private sealed class Cache
         {
             private readonly FlagFieldsDrawer drawer;
-            public readonly bool UnderlyingEnumTypeIsSByte;
             public readonly float ToggleHeight;
             public readonly FlagFieldsAttribute FlagFields;
             public readonly FlagTooltipsAttribute FlagTooltips;
             public readonly GUIContent[] FlagsContent;
+            public readonly bool IsIncompatibleType;
 
             /// <summary>
             ///     Returns <see cref="FlagFieldsAttribute"/> if such attribute is attached. Returns
@@ -62,6 +62,27 @@ namespace Sztorm.Unity.Flags
                 return result;
             }
 
+            /// <summary>
+            ///     Returns <see langword="true"/> if enum underlying type is compatible, 
+            ///     <see langword="false"/> otherwise. Requires <see cref="drawer"/> to be
+            ///     initialized.
+            /// </summary>
+            /// <returns></returns>
+            private bool GetIsIncompatibleType()
+            {
+                Type underlyingEnumType = Enum.GetUnderlyingType(drawer.fieldInfo.FieldType);
+
+                if (underlyingEnumType.Equals(typeof(sbyte)))
+                {
+                    return false;
+                }
+                else if (underlyingEnumType.Equals(typeof(byte)))
+                {
+                    return false;
+                }
+                return true;
+            }
+
             public Cache(FlagFieldsDrawer drawer)
             {
                 this.drawer = drawer;
@@ -69,9 +90,7 @@ namespace Sztorm.Unity.Flags
                 FlagFields = drawer.attribute as FlagFieldsAttribute;
                 FlagTooltips = GetFlagTooltipsAttribute();
                 FlagsContent = GetFlagsContent();
-
-                Type underlyingEnumType = Enum.GetUnderlyingType(drawer.fieldInfo.FieldType);
-                UnderlyingEnumTypeIsSByte = underlyingEnumType.Name == "SByte";
+                IsIncompatibleType = GetIsIncompatibleType();
             }
         }
     }
