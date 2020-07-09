@@ -1,67 +1,39 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using Sztorm.Extensions.Enum;
 
 namespace Sztorm.Unity.Flags
 {
-    [Flags]
-    internal enum BitFlags8 : int
-    {
-        None = 0,
-        Bit1 = 1,
-        Bit2 = 2,
-        Bit3 = 4,
-        Bit4 = 8,
-        Bit5 = 16,
-        Bit6 = 32,
-        Bit7 = 64,
-        Bit8 = -128,
-    }
-
     [CustomPropertyDrawer(typeof(FlagFieldsAttribute))]
-    internal class FlagsFieldsDrawer : PropertyDrawer
+    internal sealed partial class FlagFieldsDrawer : PropertyDrawer
     {
         private const float ToggleControlHeight = 18;
         private const float InspectorBottomPadding = 2;
-
-        private bool isCached = false;
-        private bool underlyingEnumTypeIsSByte;
-        private float toggleHeight;
-        private FlagFieldsAttribute flagFields;
-
-        private void Cache()
-        {
-            toggleHeight = GUI.skin.toggle.padding.vertical + GUI.skin.toggle.border.vertical;
-            flagFields = attribute as FlagFieldsAttribute;
-            Type underlyingEnumType = Enum.GetUnderlyingType(fieldInfo.FieldType);
-            underlyingEnumTypeIsSByte = underlyingEnumType.Name == "SByte";
-            isCached = true;
-        }
-
+        private Cache cache;
+        
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (!isCached)
+            if (cache is null)
             {
-                Cache();
+                cache = new Cache(this);
             }
-            return ToggleControlHeight * flagFields.Count - InspectorBottomPadding;
+            return ToggleControlHeight * cache.FlagFields.Count - InspectorBottomPadding;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (!isCached)
+            if (cache is null)
             {
-                Cache();
+                cache = new Cache(this);
             }
             BitFlags8 flags = (BitFlags8)(property.intValue);
-            Vector2 toggleRectSize = new Vector2(position.size.x, toggleHeight);
+            Vector2 toggleRectSize = new Vector2(position.size.x, cache.ToggleHeight);
 
             EditorGUI.BeginProperty(position, label, property);
 
-            for (int i = 0, propIndex = 0, length = flagFields.Names.Count; i < length; i++)
+            for (int i = 0, propIndex = 0, length = cache.FlagFields.Names.Count; i < length; i++)
             {
-                if (flagFields.Names[i] != null)
+                if (cache.FlagFields.Names[i] != null)
                 {
                     BitFlags8 flag = (BitFlags8)(1 << i);
 
@@ -69,14 +41,14 @@ namespace Sztorm.Unity.Flags
                         new Rect(
                             new Vector2(position.x, position.y + ToggleControlHeight * propIndex),
                             toggleRectSize),
-                        flagFields.Names[i],
+                        cache.FlagsContent[i],
                         flags.HasAllFlags(flag));
 
                     flags = flags.WithFlagsSetTo(flag, isChecked);
                     propIndex++;
                 }
             }
-            if (underlyingEnumTypeIsSByte)
+            if (cache.UnderlyingEnumTypeIsSByte)
             {
                 property.intValue = (sbyte)flags;
             }

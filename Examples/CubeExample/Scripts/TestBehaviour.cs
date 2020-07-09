@@ -40,7 +40,7 @@ public class TestBehaviour : MonoBehaviour
         tooltip0: "This is A1.",
         tooltip1: "This is B1.",
         tooltip2: "This is C1.",
-        tooltip4: "This is D1.",
+        tooltip3: "This is D1.",
         tooltip6: "This is G1.",
         tooltip7: "This is H1.")]
     [FlagFields(
