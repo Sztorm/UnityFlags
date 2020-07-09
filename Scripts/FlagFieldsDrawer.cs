@@ -70,7 +70,6 @@ namespace Sztorm.Unity.Flags
             InitDrawerFieldsIfNeeded();
             CheckFlagsTypeCompatibility();
             BitFlags32 flags = (BitFlags32)((byte)property.intValue);
-            Debug.Log((int)flags);
 
             Vector2 toggleRectSize = new Vector2(position.size.x, cache.ToggleHeight);
 
@@ -88,7 +87,6 @@ namespace Sztorm.Unity.Flags
                             toggleRectSize),
                         cache.FlagsContent[i],
                         flags.HasAllFlags(flag));
-                    Debug.Log("i:" + i + "flag: " + (int)flag);
                     flags = flags.WithFlagsSetTo(flag, isChecked);
                     propIndex++;
                 }
