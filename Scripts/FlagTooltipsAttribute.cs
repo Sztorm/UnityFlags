@@ -4,10 +4,32 @@ using UnityEngine;
 
 namespace Sztorm.Unity.Flags
 {
+    /// <summary>
+    ///     Shows tooltips of 8-bit flags in Unity inspector.<br/>
+    ///     To make sure tooltips are displayed, its field must be decorated with
+    ///     <see cref="FlagFieldsAttribute"/> attribute.<br/>
+    ///     Only tooltips that are initialized in constructor and match fields from
+    ///     <see cref="FlagFieldsAttribute"/> will be displayed.
+    /// </summary>
     public class FlagTooltipsAttribute : PropertyAttribute
     {
+        /// <summary>
+        ///     Returns flag tooltips collection. Tooltips of specified indices which are not
+        ///     initialzed will be <see langword="null"/>.
+        /// </summary>
         public readonly ReadOnlyCollection<string> Tooltips;
 
+        /// <summary>
+        ///     Initializes attribute with specified tooltips to be displayed in Unity inspector.
+        /// </summary>
+        /// <param name="tooltip0"></param>
+        /// <param name="tooltip1"></param>
+        /// <param name="tooltip2"></param>
+        /// <param name="tooltip3"></param>
+        /// <param name="tooltip4"></param>
+        /// <param name="tooltip5"></param>
+        /// <param name="tooltip6"></param>
+        /// <param name="tooltip7"></param>
         public FlagTooltipsAttribute(
             string tooltip0 = null,
             string tooltip1 = null,
